@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DomainModel;
 using DomainModel.Model;
-
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +22,12 @@ namespace DataAccessPostgreSqlProvider
 
 		public void AddDataEventRecord(DataEventRecord dataEventRecord)
 		{
-			if (dataEventRecord.SourceInfo != null && dataEventRecord.SourceInfoId == 0)
+			if (dataEventRecord.SourceInfo == null)
+			{
+				throw new ArgumentNullException(nameof(dataEventRecord.SourceInfo)); 
+			}
+
+			if (dataEventRecord.SourceInfoId == 0)
 			{
 				_context.SourceInfos.Add(dataEventRecord.SourceInfo);
 			}
